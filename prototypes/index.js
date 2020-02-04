@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const { kitties } = require('./datasets/kitties');
 const { clubs } = require('./datasets/clubs');
 const { mods } = require('./datasets/mods');
@@ -27,21 +29,30 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let orangeKitties = [];
+
+    kitties.forEach(kitty => {
+    if (kitty.color === 'orange') {
+        orangeKitties.push(kitty.name);
+      };
+    })
+    return orangeKitties;
+  },
 
     // Annotation:
-    // Write your annotation here as a comment
-  },
+    /* The other way I initially saw this was a fliter then a map,
+      I figured there was probably away to iterate over the array
+      of objects and check a conditional and push the results into
+      an array. To me this is more readable*/
 
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => b.age - a.age);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Obviously want to use the sort method here. And in decending order
   },
 
   growUp() {
@@ -58,12 +69,16 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.map(kitty => {
+      kitty.age += 2;
+      return kitty
+    });
     return result;
   }
 };
 
-
+  //I want to return an array with the same length so I chose map.
+  //map also allows edits to current arraysx
 
 
 

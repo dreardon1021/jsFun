@@ -80,17 +80,11 @@ const kittyPrompts = {
   //I want to return an array with the same length so I chose map.
   //map also allows edits to current arraysx
 
-
-
-
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-
-
-
 
 
 
@@ -104,14 +98,19 @@ const clubPrompts = {
     //   Pam: ['Drama', 'Art', 'Chess'],
     //   ...etc
     // }
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const result = {};
+    clubs.forEach((club) => {
+      club.members.forEach((member) => {
+        result[member] = result[member] || [];
+        result[member].push(club.club);
+      });
+    });
+    return result
+  }
 
     // Annotation:
-    // Write your annotation here as a comment
-  }
-};
+    //
+}
 
 
 
@@ -141,12 +140,20 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+  let averageMods = []
+  mods.forEach(obj => {
+      let newObj = {};
+      newObj.mod = obj.mod
+      newObj.studentsPerInstructor = obj.students / obj.instructors
+      averageMods.push(newObj)
+    })
+
+    return averageMods
+  
+  }
 
     // Annotation:
     // Write your annotation here as a comment
-  }
 };
 
 
@@ -175,10 +182,16 @@ const cakePrompts = {
     //    { flavor: 'yellow', inStock: 14 },
     //    ..etc
     // ]
+    let flavorArray = []
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    cakes.forEach(cake => {
+      let objToPush = {}
+      objToPush.flavor = cake.cakeFlavor
+      objToPush.inStock = cake.inStock
+      flavorArray.push(objToPush)
+    })
 
+    return flavorArray
     // Annotation:
     // Write your annotation here as a comment
   },
@@ -204,7 +217,9 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(cake => {
+      return cake.inStock > 0
+    });
     return result;
 
     // Annotation:
@@ -215,7 +230,10 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(cake => {
+      
+    })
+  
     return result;
 
     // Annotation:

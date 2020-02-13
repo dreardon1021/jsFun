@@ -109,7 +109,12 @@ const clubPrompts = {
   }
 
     // Annotation:
-    //
+    /*result is equal to an empty object;
+    iterate over each club in the club object one at a time. every time
+    a new club is iterated over the members array is itterated over.
+    every time a member is iterated over it creates a key for the persons name.
+    that keys value is equal to an empty array if their is no current value otherwise
+    its value is set to whatever it currently is. Then push that club into that keys value(an array)*/
 }
 
 
@@ -149,11 +154,13 @@ const modPrompts = {
     })
 
     return averageMods
-  
   }
 
     // Annotation:
-    // Write your annotation here as a comment
+    /* average mods is set to an empty array.  For each object in the starting array
+     create a new object.  then set its key to 'mod' and its value to the current iterated objects
+     value. Next set a key called 'studentsPerInstructor and set its value to the current iterated objects
+     students divided by its instructors*/
 };
 
 
@@ -162,7 +169,7 @@ const modPrompts = {
 
 
 // ---------------------------------------------------------------------------
-// ---------------------------------------------------------------------------
+// --------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
@@ -193,7 +200,7 @@ const cakePrompts = {
 
     return flavorArray
     // Annotation:
-    // Write your annotation here as a comment
+    // Same thing as previous example in average mods
   },
 
   onlyInStock() {
@@ -217,39 +224,49 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = cakes.filter(cake => {
-      return cake.inStock > 0
-    });
+    const result = cakes.filter(cake => cake.inStock > 0)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //Search through all of the cake objects and return an array of cakes that do
+    // not contain a inStock value of 0
   },
 
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = cakes.filter(cake => {
-      
-    })
-  
-    return result;
+    let result = cakes.reduce((acc, cake) => {
+      acc += cake.inStock
+      return acc
+    }, 0)
+
+    return result
+
+
 
     // Annotation:
-    // Write your annotation here as a comment
+    /*iterate over all of the cakes grab their in stock values. Add them all together */
   },
 
   allToppings() {
     // Return an array of all unique toppings (no duplicates) needed to bake
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
+    let uniqueToppings = []
+    let toppings = cakes.map(cake => cake.toppings)
+    toppings.forEach(array => {
+      array.forEach(topping => {
+        if(!uniqueToppings.includes(topping)) {
+        uniqueToppings.push(topping)
+        }
+      })
+    })
+    return uniqueToppings
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //
   },
 
   groceryList() {
@@ -263,11 +280,37 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+  const result = cakes.reduce((acc, cake) => {
+    cake.toppings.forEach(topping => {
+      if(!acc[topping]) {
+        acc[topping] = 1
+      } else {
+        acc[topping] = acc[topping] + 1
+      }
+    })
+    return acc
+  }, {})
+  return result
+
+
+    // const result = cakes.reduce((acc, cake) => {
+    //   cake.toppings.forEach(topping => {
+    //     if(!acc[topping]) {
+    //       acc[topping] = 1
+    //     } else {
+    //       acc[topping] = acc[topping] + 1
+    //     }
+    //   })
+    //   return acc
+    // }, {})
+    // return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    /* So since we know we want one thing from this we can reduce. We start off with an empty 
+    object. This iterates over every cake. We then iterate over the array of toppings in each cake. 
+    If the topping in the new object does not exist we create its key and set its value to 1.
+    If it does exist we set the keys value to its current value + 1*/
   }
 };
 
@@ -298,8 +341,18 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const result = classrooms.filter(room => room.program === 'FE')
+    return result
+
+
+
+
+
+
+
+
+    // const result = classrooms.filter(classroom => classroom.program === 'FE')
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -313,7 +366,15 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.reduce((acc, room) => {
+      if (room.program === 'FE') {
+        acc.feCapacity += room.capacity
+      } else {
+        acc.beCapacity += room.capacity
+      }
+      return acc
+    }, {feCapacity: 0,
+        beCapacity: 0})
     return result;
 
     // Annotation:
@@ -323,7 +384,7 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.sort((room1, room2) => room1.capacity - room2.capacity)
     return result;
 
     // Annotation:
@@ -350,7 +411,8 @@ const bookPrompts = {
     //   'Catch-22', 'Treasure Island']
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const filteredBooks = books.filter(book => book.genre !== 'Horror' && book.genre !== 'True Crime')
+    const result = filteredBooks.map(book => book.title)
     return result;
 
     // Annotation:
@@ -365,7 +427,15 @@ const bookPrompts = {
     //  { title: 'Life of Pi', year: 2001 },
     //  { title: 'The Curious Incident of the Dog in the Night-Time', year: 2003 }]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const filteredBooks = books.filter(book => book.published > 1989);
+    const result = []
+    filteredBooks.forEach(book => {
+      let bookObj = {}
+      bookObj.title = book.title;
+      bookObj.year = book.published;
+      result.push(bookObj)
+    });
+
     return result;
 
     // Annotation:
@@ -388,7 +458,7 @@ const weatherPrompts = {
     // return an array of all the average temperatures. Eg:
     // [ 40, 40, 44.5, 43.5, 57, 35, 65.5, 62, 14, 46.5 ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.map(city => (city.temperature.high + city.temperature.low) / 2);
     return result;
 
     // Annotation:
@@ -402,7 +472,8 @@ const weatherPrompts = {
     // 'New Orleans, Louisiana is sunny.',
     // 'Raleigh, North Carolina is mostly sunny.' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const sunnyCities = weather.filter(city => city.type === 'sunny' || city.type === 'mostly sunny');
+    const result = sunnyCities.map(city => `${city.location} is ${city.type}.`)
     return result;
 
     // Annotation:
@@ -418,8 +489,8 @@ const weatherPrompts = {
     //   temperature: { high: 49, low: 38 }
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const sortedCitites = weather.sort((cityA, cityB) => cityB.humidity - cityA.humidity) 
+    return sortedCitites[0];
 
     // Annotation:
     // Write your annotation here as a comment
@@ -445,7 +516,17 @@ const nationalParksPrompts = {
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((acc, park) => {
+      if(park.visited === false) {
+        acc.parksToVisit.push(park.name)
+      } else {
+        acc.parksVisited.push(park.name)
+      }
+      return acc
+    }, {
+      parksToVisit: [],
+      parksVisited: []
+    });
     return result;
 
     // Annotation:
@@ -461,9 +542,14 @@ const nationalParksPrompts = {
     // { Utah: 'Zion' },
     // { Florida: 'Everglades' } ]
 
+    let array = []
+    nationalParks.forEach(park => {
+      let parkObj = {}
+      parkObj[park.location] = park.name
+      array.push(parkObj)
+    })
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    return array;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -485,9 +571,17 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let activites = [];
+    let allActivities = nationalParks.map(park => park.activities)
+    allActivities.forEach(array => {
+      array.forEach(item => {
+        if (!activites.includes(item)){
+          activites.push(item)
+        }
+      })
+    })
 
+    return activites;
     // Annotation:
     // Write your annotation here as a comment
   }
@@ -512,7 +606,10 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((acc, beers) => {
+      acc += beers.beers.length
+      return acc
+    }, 0);
     return result;
 
     // Annotation:
@@ -527,8 +624,13 @@ const breweryPrompts = {
     //  { name: 'Ratio Beerworks', beerCount: 5},
     // ...etc.
     // ]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = []
+    breweries.forEach(brewery => {
+      let obj = {}
+      obj.name = brewery.name
+      obj.beerCount = brewery.beers.length
+      result.push(obj)
+    })
     return result;
 
     // Annotation:
@@ -540,8 +642,16 @@ const breweryPrompts = {
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const beers = breweries.map(brewery => brewery.beers)
+    const beerData = []
+    beers.forEach(array => {
+      array.forEach(beer => {
+        beerData.push(beer)
+      })
+    })
+
+    beerData.sort((beerA, beerB) => beerB.abv - beerA.abv)
+    return beerData[0]
 
     // Annotation:
     // Write your annotation here as a comment
@@ -588,8 +698,23 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let addedCounts = instructors.map(instructor => {
+      cohorts.forEach(cohort => {
+        if(cohort.module === instructor.module) {
+          instructor.studentCount = cohort.studentCount
+        }
+      })
+      return instructor
+    })
+
+    let result = addedCounts.map(instructor => {
+      return {
+        name: instructor.name,
+        studentCount: instructor.studentCount
+      }
+    })
+
+    return result
 
     // Annotation:
     // Write your annotation here as a comment
@@ -602,8 +727,21 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const moduleTeachers = instructors.reduce((acc, instructor) => {
+      cohorts.forEach(cohort => {
+        let cohortName = cohort.cohort
+        let mod = {}
+        mod[cohortName] = mod[cohortName]|| []
+        mod[cohortName].push(instructor.name)
+        acc.push(mod)
+      })
+      return acc
+    }, [])
+
+    console.log(moduleTeachers)
+
+    // const result = 'REPLACE WITH YOUR RESULT HERE';
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -913,7 +1051,9 @@ const dinosaurPrompts = {
 
   actorsAgesInMovies() {
     /*
-    Return an array of objects for each human and the age(s) they were in the movie(s) they were cast in, as an array of age(s). Only include humans who were cast in at least one movie.
+    Return an array of objects for each human and the age(s) they were in the movie(s)
+    they were cast in, as an array of age(s). Only include humans who were cast in at
+    least one movie.
 
     e.g.
     [ { name: 'Sam Neill', ages: [ 46, 54 ] },

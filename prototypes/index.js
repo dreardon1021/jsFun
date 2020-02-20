@@ -727,21 +727,24 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const moduleTeachers = instructors.reduce((acc, instructor) => {
-      cohorts.forEach(cohort => {
-        let cohortName = cohort.cohort
-        let mod = {}
-        mod[cohortName] = mod[cohortName]|| []
-        mod[cohortName].push(instructor.name)
-        acc.push(mod)
+    // create an object of teachers in modules to get the length
+
+
+    cohorts.forEach(cohort => {
+        instructors.forEach(instructor => {
+          if (cohort.module === instructor.module) {
+            cohort.instructors = cohort.instructors || [];
+            cohort.instructors.push(instructor.name)
+          }
+        })
       })
+
+    let result = cohorts.reduce((acc, cohort) => {
+      acc['cohort' + cohort.cohort] = cohort.studentCount / cohort.instructors.length
       return acc
-    }, [])
+    }, {})
 
-    console.log(moduleTeachers)
-
-    // const result = 'REPLACE WITH YOUR RESULT HERE';
-    // return result;
+    return result
 
     // Annotation:
     // Write your annotation here as a comment
@@ -762,7 +765,19 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((acc, instructor) => {
+      acc[instructor.name] = [];
+      cohorts.forEach(cohort => {
+        cohort.curriculum.forEach(topic => {
+          if(instructor.teaches.includes(topic) && !acc[instructor.name].includes(cohort.module)) {
+            acc[instructor.name].push(cohort.module);
+          }
+        });
+      });
+      return acc
+    }, {});
+
+
     return result;
 
     // Annotation:
@@ -779,7 +794,16 @@ const turingPrompts = {
     //   recursion: [ 'Pam', 'Leta' ]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((acc, instructor) => {
+      instructor.teaches.forEach(topic => {
+        if(instructor.teaches.includes(topic)) {
+          acc[topic] = acc[topic] || []
+          acc[topic].push(instructor.name)
+        }
+      })
+      return acc
+    }, {})
+  
     return result;
 
     // Annotation:
@@ -814,8 +838,55 @@ const bossPrompts = {
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    // let keys = Object.keys(bosses)
+
+    // const bossArray = keys.map(key => {
+    //   return {
+    //     bossName: bosses[key].name,
+    //     sidekickLoyalty: []
+    //   }
+    // })
+
+    // sidekicks.forEach(sidekick => {
+    //   if(sidekick.boss === 'Scar') {
+    //    let boss = bossArray.find(boss => boss.bossName === 'Scar')
+    //    boss.sidekickLoyalty.push(sidekick.loyaltyToBoss)
+    //   } else if (sidekick.boss === 'Ursula') {
+    //       let boss = bossArray.find(boss => boss.bossName === 'Ursula')
+    //       boss.sidekickLoyalty.push(sidekick.loyaltyToBoss)
+    //   } else if (sidekick.boss === 'Jafar') {
+    //       let boss = bossArray.find(boss => boss.bossName === 'Jafar')
+    //       boss.sidekickLoyalty.push(sidekick.loyaltyToBoss)
+    //   }
+    // })
+
+    // return bossArray.map(boss => {
+    //   return boss.sidekickLoyalty.reduce((acc, num) => {
+    //   acc.sidekickLoyalty += num
+    //   return acc
+    //   }, {
+    //     bossName: boss.bossName,
+    //     sidekickLoyalty: 0
+    //   })
+    // })
+
+    let bossLoyalty = sidekicks.reduce((acc, sidekick) => {
+        acc[sidekick.boss] += sidekick.loyaltyToBoss;
+        return acc
+    }, {'Scar': 0,
+        'Ursula': 0,
+        'Jafar': 0})
+
+    let keys = Object.keys(bossLoyalty)
+
+    let result = keys.map(key => {
+      return {
+        bossName: key,
+        sidekickLoyalty: bossLoyalty[key]
+      }
+    })
+
+    return result
 
     // Annotation:
     // Write your annotation here as a comment
